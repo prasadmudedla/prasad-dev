@@ -1,0 +1,11 @@
+---
+import { tools } from '../data/profile';
+---
+<section id="tools" aria-labelledby="tools-title">
+  <div class="sec-head"><div><div class="label">Coverage report</div><h2 id="tools-title">Tools I reach for</h2></div></div>
+  <dl class="cov">
+    {tools.map((t) => (
+      <div class="cov-row"><dt>{t.area}</dt><dd>{t.list}</dd></div>
+    ))}
+  </dl>
+</section>

@@ -1,0 +1,22 @@
+---
+order: 1
+spec: canva-ai.spec
+client: Canva AI
+org: Canva
+years: "2026"
+status: running
+lead: true
+headline: Testing AI that gives a different answer every time
+context: Canva AI turns a request in plain words into calls to design tools, sometimes chaining several together. Any model or prompt change can quietly break those choices, and pass/fail tests can't see it.
+stack: [Eval pipelines, LLM-as-judge, Tool descriptions, YAML + GitHub]
+filters: [ai, strategy, automation]
+---
+import EvalMatrix from '../../components/EvalMatrix.astro';
+
+An eval pipeline that runs against production with a dedicated test account. It tests the agent at three levels of tool use, each as a single message and as a longer conversation. An LLM judge scores the results, and browser evals check the whole experience end to end.
+
+<EvalMatrix />
+
+Around it, I built the pieces that make it useful day to day. Every failure is matched against bugs already reported, so only new problems reach triage. I tuned the description of every tool so the agent knows what each one does and when to call it. The test cases live as YAML in GitHub, so product managers add prompts themselves and every run leaves a report behind. Fixing what the evals caught lifted pass rates by 20–30%.
+
+For Canva AI's big March release, I also helped design the system that gathered the flood of bug reports from every channel, sorted them by area and sent each one to the right team.

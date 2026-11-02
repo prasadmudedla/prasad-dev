@@ -1,0 +1,25 @@
+---
+import { hero } from '../data/profile';
+import Terminal from './Terminal.astro';
+const [line1, line2] = hero.headline;
+---
+<header class="hero">
+  <div>
+    <div class="label">{hero.label}</div>
+    <h1><span class="ln">{line1}</span> <span class="ln hl">{line2}</span></h1>
+  </div>
+
+  <div class="hero-row">
+    <div class="hero-intro">
+      <ul class="modes" aria-label="What I do">
+        {hero.modes.map((m) => <li class:list={{ now: m.now }}>{m.label}</li>)}
+      </ul>
+      <p class="lede">{hero.lede}</p>
+      <div class="cta">
+        <a class="btn" href="#work">See the work</a>
+        <a class="btn ghost" href="#contact">Say hello</a>
+      </div>
+    </div>
+    <Terminal />
+  </div>
+</header>

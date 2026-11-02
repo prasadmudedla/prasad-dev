@@ -1,0 +1,21 @@
+---
+import { career } from '../data/profile';
+---
+<section id="career" aria-labelledby="career-title">
+  <div class="sec-head">
+    <div><div class="label">Career</div><h2 id="career-title">{career.title}</h2></div>
+    <p>{career.intro}</p>
+  </div>
+  <div class="chapters">
+    {career.chapters.map((c) => (
+      <div class:list={['chapter', { now: c.current }]}>
+        <span class="yrs">{c.years}</span>
+        <div>
+          <h3><span class="tick" aria-hidden="true">{c.current ? '◌' : '✓'}</span>{c.company}</h3>
+          <div class="role">{c.role}</div>
+        </div>
+        <p>{c.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

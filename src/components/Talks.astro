@@ -1,0 +1,15 @@
+---
+import { talks } from '../data/profile';
+---
+<section id="talks" aria-labelledby="talks-title">
+  <div class="sec-head"><div><div class="label">Talks &amp; teaching</div><h2 id="talks-title">On stage and in the room</h2></div></div>
+  <div class="talks">
+    {talks.map((t) => (
+      <div class="talk">
+        <div class="ev">{t.event}</div>
+        <h3>{t.title}</h3>
+        <p>{t.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

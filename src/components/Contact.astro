@@ -1,0 +1,87 @@
+---
+/* Contact form. Posts to /api/contact (src/pages/api/contact.ts), which emails you through Resend. */
+import { contact, links } from '../data/profile';
+---
+<section id="contact" class="contact" aria-labelledby="contact-title">
+  <div class="label">{contact.kicker}</div>
+  <div class="contact-grid">
+    <div>
+      <h2 id="contact-title">{contact.headline}</h2>
+      <div class="lines">
+        <a href={links.linkedin.href} rel="me">{links.linkedin.label}</a>
+        <a href={links.github.href} rel="me">{links.github.label}</a>
+      </div>
+    </div>
+
+    <form class="msgform" data-contact-form novalidate action="/api/contact" method="post">
+      <div class="row2">
+        <div class="field">
+          <label for="m-name">Name</label>
+          <input id="m-name" name="name" required maxlength="100" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="m-email">Your email</label>
+          <input id="m-email" name="email" type="email" required maxlength="200" autocomplete="email" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="m-msg">Message</label>
+        <textarea id="m-msg" name="message" rows="5" required maxlength="5000" placeholder={contact.placeholder}></textarea>
+      </div>
+      <!-- Honeypot: hidden from people, bots fill it in, the server ignores those messages. -->
+      <input class="hp" name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="formfoot">
+        <button class="btn" type="submit">Send message</button>
+        <span class="mstatus" data-status role="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]')!;
+  const status = form.querySelector<HTMLElement>('[data-status]')!;
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function say(text: string, kind: 'ok' | 'warn' | '' = '') {
+    status.className = `mstatus ${kind}`;
+    status.textContent = text;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+
+    let ok = true;
+    for (const [name, check] of [
+      ['name', (v: string) => v.trim().length > 0],
+      ['email', (v: string) => EMAIL.test(v.trim())],
+      ['message', (v: string) => v.trim().length > 0],
+    ] as const) {
+      const field = form.elements.namedItem(name) as HTMLInputElement;
+      const bad = !check(data[name] ?? '');
+      field.setAttribute('aria-invalid', String(bad));
+      if (bad) ok = false;
+    }
+    if (!ok) return say('Add your name, a valid email and a message.', 'warn');
+
+    button.disabled = true;
+    say('Sending…');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || 'Something went wrong.');
+      form.reset();
+      say("Thanks, your message is in my inbox. I'll reply soon.", 'ok');
+    } catch (err) {
+      say(err instanceof Error ? err.message : 'Something went wrong.', 'warn');
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>

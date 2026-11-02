@@ -1,0 +1,57 @@
+---
+/* The career "test run" in the hero. Data: terminalRun in src/data/profile.ts */
+import { terminalRun } from '../data/profile';
+const passed = terminalRun.filter((r) => !r.current).length;
+const running = terminalRun.length - passed;
+const firstYear = terminalRun[0]?.year ?? 2015;
+const years = new Date().getFullYear() - firstYear;
+---
+<div class="term">
+  <p class="sr-only">Career shown as a test run: {terminalRun.map((r) => `${r.year}, ${r.what}`).join('; ')}.</p>
+  <div class="term-bar"><span>~/prasad — zsh</span><button type="button" data-rerun>↻ Re-run</button></div>
+  <div class="term-body" aria-hidden="true">
+    <div class="cmd">$ <b>npx prasad</b> --reporter=story</div>
+    <div data-runlist>
+      {terminalRun.map((r) => (
+        <div class="run-row" data-current={r.current ? 'true' : undefined}>
+          {r.current
+            ? <span class="st run"><span>◌</span></span>
+            : <span class="st pass">✓</span>}
+          <span>{r.file}</span><span class="yr">{r.year}</span><span class="what">{r.what}</span>
+        </div>
+      ))}
+    </div>
+    <div class="summary">
+      <span>Suites: <span class="p">{passed} passed</span>, <span class="r">{running} running</span></span>
+      <span>Time: {years}+ yrs</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Replays the run: each finished job flips from ◌ to ✓ in turn. Skipped for reduced-motion users.
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-runlist] .run-row')];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RUNNING = '<span class="st run"><span>◌</span></span>';
+  const PASS = '<span class="st pass">✓</span>';
+  let timer: number | undefined;
+
+  function setRow(row: HTMLElement, done: boolean) {
+    row.firstElementChild!.outerHTML = done && !row.dataset.current ? PASS : RUNNING;
+  }
+
+  function play() {
+    if (reduced) return;
+    clearInterval(timer);
+    rows.forEach((r) => setRow(r, false));
+    let n = 0;
+    timer = window.setInterval(() => {
+      if (rows[n]) setRow(rows[n], true);
+      n++;
+      if (n >= rows.length) clearInterval(timer);
+    }, 380);
+  }
+
+  document.querySelector('[data-rerun]')?.addEventListener('click', play);
+  setTimeout(play, 250);
+</script>

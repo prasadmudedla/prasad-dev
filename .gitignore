@@ -1,0 +1,21 @@
+# dependencies and build output
+node_modules/
+dist/
+.astro/
+.vercel/
+
+# secrets: never commit these
+.env
+.env.*
+!.env.example
+
+# test output
+test-results/
+playwright-report/
+blob-report/
+
+# editors / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/

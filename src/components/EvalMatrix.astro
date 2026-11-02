@@ -1,0 +1,30 @@
+---
+/* The eval coverage table inside the Canva AI story (src/content/work/01-canva-ai.mdx). */
+const levels = [
+  { name: 'Single tool', question: 'Did it pick the right tool?', single: '✓', multi: '✓' },
+  { name: 'Two-tool chain', question: 'Right tools, right order?', single: '✓', multi: '✓' },
+  { name: 'Multi-tool chain', question: 'Does a longer plan hold together?', single: '✓', multi: '✓' },
+];
+---
+<div class="evalmap" role="table" aria-label="Eval coverage">
+  <div class="em-top" role="row">
+    <span role="cell"><b>Browser evals</b> · a dedicated tool runs every scenario in a real browser and reports what the user would see</span>
+  </div>
+  <div class="em-row em-head" role="row">
+    <span role="columnheader"><span class="sr-only">Level</span></span>
+    <span role="columnheader">Single-turn</span>
+    <span role="columnheader">Multi-turn</span>
+  </div>
+  {levels.map((l) => (
+    <div class="em-row" role="row">
+      <span class="em-k" role="rowheader"><b>{l.name}</b><small>{l.question}</small></span>
+      <span class="em-c" role="cell" aria-label="covered">{l.single}</span>
+      <span class="em-c" role="cell" aria-label="covered">{l.multi}</span>
+    </div>
+  ))}
+  <div class="em-row em-judge" role="row">
+    <span class="em-k" role="rowheader"><b>LLM-as-judge</b><small>Scores the result with full context and feature flags</small></span>
+    <span class="em-c soft" role="cell">some</span>
+    <span class="em-c" role="cell">most</span>
+  </div>
+</div>

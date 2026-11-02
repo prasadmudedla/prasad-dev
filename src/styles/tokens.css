@@ -1,0 +1,37 @@
+/*
+  Design tokens: the only place colours and fonts are defined.
+  Change a value here and it updates everywhere.
+
+  Theme switching: <html data-theme="light|dark"> (set by the toggle in the nav).
+  Default is dark. Palette: "Forest".
+*/
+
+:root {
+  /* light */
+  --bg: #F1F3EE;
+  --surface: #FBFCF9;
+  --line: #D5DBCD;
+  --fg: #18201A;
+  --muted: #5E6B5F;
+  --accent: #2F6B3A;
+  --pass: #2F6B3A;   /* ✓ passed / shipped */
+  --run: #8F5B00;    /* ◌ running / current */
+
+  --display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --max: 1080px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #101410;
+  --surface: #171D17;
+  --line: #283028;
+  --fg: #E3E9E1;
+  --muted: #94A193;
+  --accent: #8BC98F;
+  --pass: #8BC98F;
+  --run: #E2AE4A;
+  color-scheme: dark;
+}

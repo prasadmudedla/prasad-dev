@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import { workFilters, moreWork } from '../data/profile';
+import CaseCard from './CaseCard.astro';
+
+const stories = (await getCollection('work', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const countWords = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+const heading = `${countWords[stories.length] ?? stories.length} launches I'm proud of`;
+---
+<section id="work" aria-labelledby="work-title">
+  <div class="sec-head work-head">
+    <div><div class="label">Selected work</div><h2 id="work-title">{heading}</h2></div>
+    <div class="chips" role="group" aria-label="Filter work by skill">
+      {workFilters.map((f, i) => (
+        <button type="button" class="chip" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+      ))}
+    </div>
+  </div>
+
+  <div class="stories">
+    {stories.map((entry) => <CaseCard entry={entry} />)}
+    <p class="no-match" data-no-match hidden>No projects match that filter yet.</p>
+  </div>
+
+  <div class="label more-title">More client work</div>
+  <div class="more">
+    {moreWork.map((m) => (
+      <div class="mini">
+        <div class="who"><span>{m.org}</span><span>{m.kind}</span></div>
+        <h3>{m.title}</h3>
+        <p>{m.text}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.story')];
+  const empty = document.querySelector<HTMLElement>('[data-no-match]');
+
+  function apply(filter: string) {
+    let shown = 0;
+    cards.forEach((card) => {
+      const on = filter === 'all' || (card.dataset.filters ?? '').split(' ').includes(filter);
+      card.hidden = !on;
+      if (on) shown++;
+    });
+    if (empty) empty.hidden = shown > 0;
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
+  }
+
+  chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
+</script>

@@ -1,0 +1,25 @@
+---
+/*
+  "This page is tested too." The numbers come from src/data/ci.json,
+  which `npm run test:report` rewrites from the latest Playwright run.
+*/
+import ci from '../data/ci.json';
+
+const e2eOk = ci.e2e.total > 0 && ci.e2e.passed === ci.e2e.total;
+const a11yOk = ci.a11y.violations === 0;
+const date = ci.updated
+  ? new Date(ci.updated).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+  : null;
+---
+<footer>
+  <span>This page is tested too.</span>
+  {date ? (
+    <div class="ci" aria-label="Latest test results">
+      <span><b class:list={{ fail: !e2eOk }}>{e2eOk ? '✓' : '✗'}</b> e2e {ci.e2e.passed}/{ci.e2e.total}</span>
+      <span><b class:list={{ fail: !a11yOk }}>{a11yOk ? '✓' : '✗'}</b> a11y {ci.a11y.violations} violations</span>
+      <span>last run {date}</span>
+    </div>
+  ) : (
+    <div class="ci"><span>tests not run yet</span></div>
+  )}
+</footer>
