@@ -1,0 +1,32 @@
+---
+/* One page per project story: /work/canva-ai, /work/affinity, … Built from src/content/work/. */
+import Page from '../../layouts/Page.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { getStories, slugOf, storyUrl, type Story } from '../../lib/work';
+
+export async function getStaticPaths() {
+  const stories = await getStories();
+  return stories.map((entry, i) => ({
+    params: { slug: slugOf(entry) },
+    props: { entry, prev: stories[i - 1], next: stories[i + 1] },
+  }));
+}
+
+interface Props { entry: Story; prev?: Story; next?: Story }
+const { entry, prev, next } = Astro.props;
+const d = entry.data;
+---
+<Page title={`${d.client}: ${d.headline}`} description={d.context}>
+  <div class="crumb"><a href="/work">← All work</a></div>
+
+  <CaseCard entry={entry} />
+
+  <nav class="pager" aria-label="More projects">
+    {prev && (
+      <a class="prev" href={storyUrl(prev)}><small>← Previous</small><span>{prev.data.client}</span></a>
+    )}
+    {next && (
+      <a class="next" href={storyUrl(next)}><small>Next →</small><span>{next.data.client}</span></a>
+    )}
+  </nav>
+</Page>

@@ -1,0 +1,14 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page title="Page not found">
+  <section class="notfound" aria-labelledby="nf-title">
+    <div class="label">✗ 1 failed · 404</div>
+    <h1 id="nf-title">This page didn't pass.</h1>
+    <p>The link may be old, or the page has moved.</p>
+    <div class="cta">
+      <a class="btn" href="/">Go home</a>
+      <a class="btn ghost" href="/work">See the work</a>
+    </div>
+  </section>
+</Page>

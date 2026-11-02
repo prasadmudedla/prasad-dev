@@ -1,6 +1,15 @@
 # prasad.dev
 
-My personal site. One page: what I do, the projects I'm proud of, my career, and a contact form.
+My personal site, in four tabs:
+
+| Tab | Address | What's on it |
+| --- | --- | --- |
+| Home | `/` | Who I am, the test-run terminal, three featured projects |
+| Work | `/work` | Every project as a card, with filters. Each card opens its own story page, e.g. `/work/canva-ai` |
+| About | `/about` | Career, tools and talks |
+| Contact | `/contact` | The contact form |
+
+The tabs stay pinned to the top of every page, and the current one is highlighted.
 
 - **Built with** [Astro](https://astro.build): plain HTML and CSS, with a little JavaScript for the theme toggle, the filters and the form.
 - **Hosted on** [Vercel](https://vercel.com).
@@ -57,16 +66,18 @@ filters: [performance]         # which filter chips show this card
 The "What I built" text goes here, as normal paragraphs.
 ```
 
-- **Add a project:** copy an existing file, rename it and edit it. The heading ("Six launches…") counts the cards for you.
+- **Each file becomes a page.** `03-brand-kits.mdx` is served at `/work/brand-kits` (the number is dropped).
+- **Add a project:** copy an existing file, rename it and edit it. Its page, its card on Work and the Next/Previous links appear automatically. The heading ("Six launches…") counts the cards for you.
 - **Hide a project without deleting it:** add `draft: true`.
-- **Make a card the big lead story:** add `lead: true`.
+- **Make a card the big, full-width one:** add `lead: true`.
+- **Change which projects show on Home:** edit `home.featured` in `src/data/profile.ts`.
 - **Typos in the front matter:** `npm run dev` points to the exact file and field.
 
 The Canva AI story embeds the eval table with `<EvalMatrix />`. Edit the table in `src/components/EvalMatrix.astro`.
 
 ### 2. Everything else → `src/data/profile.ts`
 
-The hero text, the terminal "test run", the filter chips, "More client work", career, tools, talks, contact copy and social links. It's plain text inside quotes. Keep the commas and quotes where they are and you're fine.
+The tabs, the hero text, the terminal "test run", the featured projects on Home, the filter chips, "More client work", career, tools, talks, contact copy and social links. It's plain text inside quotes. Keep the commas and quotes where they are and you're fine.
 
 ### 3. Colours and fonts → `src/styles/tokens.css`
 
@@ -78,18 +89,26 @@ One file holds both palettes, light and dark (the "Forest" theme). Change a colo
 
 ```
 src/
-  pages/
-    index.astro          the page itself: puts the sections in order
+  pages/                 one file per page; the file path is the web address
+    index.astro          Home  (/)
+    work/index.astro     Work  (/work)
+    work/[slug].astro    one page per project story (/work/canva-ai, …)
+    about.astro          About (/about)
+    contact.astro        Contact (/contact)
+    404.astro            "page not found"
     api/contact.ts       the contact form's server function (Resend)
-  components/            one file per section: Hero, Work, CaseCard, Career, Contact, Footer…
+  components/            the building blocks: Nav, Hero, StoryCard, CaseCard, Career, Contact, Footer…
+  layouts/
+    Base.astro           <head>, fonts, SEO tags, theme setup
+    Page.astro           every page's frame: pinned nav, content, footer
+  lib/work.ts            loads the stories and works out their web addresses
   content/work/          ← project stories (edit these)
   data/
     profile.ts           ← all other page text (edit this)
     ci.json              footer test numbers (written by `npm run test:report`)
-  layouts/Base.astro     <head>, fonts, SEO tags, theme setup
   styles/
     tokens.css           ← colours and fonts
-    global.css           layout and component styles, in page order
+    global.css           layout and component styles
   content.config.ts      the fields every project story must have
 tests/                   Playwright tests: page, contact form, accessibility
 scripts/write-ci.mjs     turns the test report into src/data/ci.json
@@ -136,9 +155,9 @@ npm test
 
 | File | Checks |
 | --- | --- |
-| `tests/site.spec.ts` | Headline, all six stories, the eval table, filters, nav links, the light/dark toggle (and that it's remembered), no sideways scrolling |
+| `tests/site.spec.ts` | The tabs (each opens its page, the right one is highlighted, they stay pinned), Home, Work and its filters, every story page, Next/Previous, About, the 404 page, light/dark carrying across pages, no sideways scrolling |
 | `tests/contact.spec.ts` | Form validation, success and error messages (API mocked), and the real API's validation and honeypot. **No email is ever sent by tests.** |
-| `tests/a11y.spec.ts` | axe WCAG 2.1 AA scan in both dark and light mode |
+| `tests/a11y.spec.ts` | axe WCAG 2.1 AA scan of every page, in both dark and light mode |
 
 Every test runs on a desktop browser and a phone-sized browser. A failed run leaves an HTML report: `npx playwright show-report`.
 

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('contact form (UI)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/#contact');
+    await page.goto('/contact');
   });
 
   test('asks for missing fields instead of sending', async ({ page }) => {

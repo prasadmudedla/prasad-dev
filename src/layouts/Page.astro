@@ -1,0 +1,21 @@
+---
+/* Every page: the pinned nav at the top, the page content, the footer. */
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/profile';
+
+interface Props {
+  /** Page name for the browser tab, e.g. "Work". Leave out on the home page. */
+  title?: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+---
+<Base title={title ? `${title} · ${site.name}` : site.title} description={description}>
+  <Nav />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+</Base>

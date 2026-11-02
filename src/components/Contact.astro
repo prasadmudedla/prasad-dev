@@ -1,12 +1,14 @@
 ---
 /* Contact form. Posts to /api/contact (src/pages/api/contact.ts), which emails you through Resend. */
 import { contact, links } from '../data/profile';
+interface Props { as?: 'h1' | 'h2' }
+const { as: Heading = 'h2' } = Astro.props;
 ---
 <section id="contact" class="contact" aria-labelledby="contact-title">
   <div class="label">{contact.kicker}</div>
   <div class="contact-grid">
     <div>
-      <h2 id="contact-title">{contact.headline}</h2>
+      <Heading id="contact-title">{contact.headline}</Heading>
       <div class="lines">
         <a href={links.linkedin.href} rel="me">{links.linkedin.label}</a>
         <a href={links.github.href} rel="me">{links.github.label}</a>

@@ -1,0 +1,11 @@
+---
+/* The CI-style top bar on every project card: "✓ affinity.spec · Affinity · Canva · 2025   launched" */
+import type { Story } from '../lib/work';
+interface Props { entry: Story }
+const d = Astro.props.entry.data;
+const current = d.status === 'running';
+---
+<div class="case-bar">
+  <span><span class="ok" aria-hidden="true">{current ? '◌' : '✓'}</span><b>{d.spec}</b> · {d.client} · {d.org} · {d.years}</span>
+  <span class:list={['status', { live: current }]}>{d.status}</span>
+</div>

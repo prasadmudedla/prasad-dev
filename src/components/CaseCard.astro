@@ -1,32 +1,26 @@
 ---
-/* One project card. Content comes from a file in src/content/work/. */
-import { render, type CollectionEntry } from 'astro:content';
+/* The full project card, shown on each story page. Content comes from a file in src/content/work/. */
+import { render } from 'astro:content';
+import type { Story } from '../lib/work';
+import CaseBar from './CaseBar.astro';
 
-interface Props { entry: CollectionEntry<'work'> }
+interface Props { entry: Story }
 const { entry } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
-const current = d.status === 'running';
 ---
-<article
-  class:list={['story', { lead: d.lead, current }]}
-  data-filters={d.filters.join(' ')}
-  aria-labelledby={`h-${entry.id}`}
->
-  <div class="case-bar">
-    <span><span class="ok" aria-hidden="true">{current ? '◌' : '✓'}</span><b>{d.spec}</b> · {d.client} · {d.org} · {d.years}</span>
-    <span class:list={['status', { live: current }]}>{d.status}</span>
-  </div>
+<article class:list={['story', 'lead', { current: d.status === 'running' }]} aria-labelledby="story-title">
+  <CaseBar entry={entry} />
   <div class="case-in">
     <div class="case-head">
-      <h3 id={`h-${entry.id}`}>{d.headline}</h3>
+      <h1 id="story-title">{d.headline}</h1>
       <p class="ctx">{d.context}</p>
       <ul class="stack" aria-label="Tools">
         {d.stack.map((t) => <li>{t}</li>)}
       </ul>
     </div>
     <div class="built">
-      <div class="label">What I built</div>
+      <h2 class="label">What I built</h2>
       <Content />
     </div>
   </div>

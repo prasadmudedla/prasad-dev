@@ -1,9 +1,11 @@
 ---
 import { career } from '../data/profile';
+interface Props { as?: 'h1' | 'h2' }
+const { as: Heading = 'h2' } = Astro.props;
 ---
 <section id="career" aria-labelledby="career-title">
   <div class="sec-head">
-    <div><div class="label">Career</div><h2 id="career-title">{career.title}</h2></div>
+    <div><div class="label">Career</div><Heading id="career-title">{career.title}</Heading></div>
     <p>{career.intro}</p>
   </div>
   <div class="chapters">

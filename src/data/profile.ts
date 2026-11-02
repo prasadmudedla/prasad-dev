@@ -1,5 +1,5 @@
 /**
- * Everything on the page that ISN'T a project story lives here.
+ * Everything on the site that ISN'T a project story lives here.
  * Project stories are markdown files in src/content/work/.
  *
  * Edit the text, save, and the dev server reloads.
@@ -18,11 +18,12 @@ export const links = {
   github: { href: 'https://github.com/prasadmudedla', label: 'github/prasadmudedla' },
 };
 
+/** The tabs pinned to the top of every page. Each one is a page in src/pages/. */
 export const nav = [
-  { href: '#work', label: 'Work' },
-  { href: '#career', label: 'Career' },
-  { href: '#talks', label: 'Talks' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/', label: 'Home' },
+  { href: '/work', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 /* ---------- hero ---------- */
@@ -47,6 +48,13 @@ export const terminalRun = [
   { file: 'hellofresh.spec', year: 2022, what: 'moved to Sydney, wrote Go' },
   { file: 'canva.spec', year: 2024, what: 'Canva AI evals · Affinity', current: true },
 ];
+
+/* ---------- home ---------- */
+export const home = {
+  featuredTitle: 'A few launches I\'m proud of',
+  /** The cards on the home page, by story filename (without the number), in this order. */
+  featured: ['canva-ai', 'affinity', 'process-mining'],
+};
 
 /* ---------- work ---------- */
 /** Filter chips above the project cards. `id` must match the `filters` values in each work file. */

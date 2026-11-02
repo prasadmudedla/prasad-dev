@@ -1,11 +1,18 @@
 ---
+/* The tabs pinned to the top of every page. The current page's tab is highlighted (aria-current). */
 import { nav } from '../data/profile';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+// "Work" stays highlighted on the story pages under /work/.
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`));
 ---
 <nav class="top" aria-label="Main">
   <a class="brand" href="/">prasad<b>.dev</b></a>
   <div class="navr">
     <ul>
-      {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      {nav.map((item) => (
+        <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+      ))}
     </ul>
     <div class="theme" role="group" aria-label="Colour mode">
       <button type="button" data-theme-btn="light" aria-pressed="false">Light</button>
