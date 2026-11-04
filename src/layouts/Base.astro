@@ -8,6 +8,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import { site } from '../data/profile';
+import Analytics from '@vercel/analytics/astro';
 
 const { title = site.title, description = site.description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -41,5 +42,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <div class="wrap">
       <slot />
     </div>
+    <Analytics />
   </body>
 </html>
